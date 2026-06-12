@@ -9,7 +9,7 @@ from config.app_config import (
     COLOR_TEXT
 )
 from views.dashboard_view import DashboardView
-
+from views.clientes_view import ClientesView 
 
 class MainLayout(ctk.CTkToplevel):
     def __init__(self, user):
@@ -42,7 +42,7 @@ class MainLayout(ctk.CTkToplevel):
 
         buttons = [
             ("Dashboard", self.show_dashboard),
-            ("Clientes", self.not_available),
+            ("Clientes", self.show_clients),
             ("Proyectos", self.not_available),
             ("Materiales", self.not_available),
             ("Mano de obra", self.not_available),
@@ -89,3 +89,14 @@ class MainLayout(ctk.CTkToplevel):
 
     def exit_app(self):
         self.destroy()
+
+    def show_clients(self):
+
+        self.clear_content()
+
+        frame = ClientesView(self.content)
+
+        frame.pack(
+            expand=True,
+            fill="both"
+        )
