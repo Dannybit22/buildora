@@ -14,7 +14,7 @@ class BaseTable(ctk.CTkFrame):
             self,
             columns=self.columns,
             show="headings",
-            height=14
+            height=5
         )
 
         for column in self.columns:

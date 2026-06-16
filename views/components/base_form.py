@@ -58,30 +58,40 @@ class BaseForm(ctk.CTkFrame):
         return data
 
     def set_data(self, data):
-        for name, widget in self.inputs.items():
-            value = data.get(name, "")
+        for name, value in data.items():
+            widget = self.inputs.get(name)
 
-            if isinstance(widget, ctk.CTkEntry):
-                widget.delete(0, "end")
-                widget.insert(0, value)
+            if not widget:
+                continue
 
-            elif isinstance(widget, ctk.CTkTextbox):
+            value = "" if value is None else str(value)
+
+            if isinstance(widget, ctk.CTkTextbox):
                 widget.delete("1.0", "end")
                 widget.insert("1.0", value)
 
             elif isinstance(widget, ctk.CTkOptionMenu):
                 widget.set(value)
 
-    def clear(self):
-        for name, widget in self.inputs.items():
-
-            if isinstance(widget, ctk.CTkEntry):
+            else:
                 widget.delete(0, "end")
+                widget.insert(0, value)
 
-            elif isinstance(widget, ctk.CTkTextbox):
+    def clear(self):
+        for field in self.fields:
+            name = field["name"]
+            widget = self.inputs.get(name)
+
+            if not widget:
+                continue
+
+            if isinstance(widget, ctk.CTkTextbox):
                 widget.delete("1.0", "end")
 
             elif isinstance(widget, ctk.CTkOptionMenu):
-                values = widget.cget("values")
+                values = field.get("values", [])
                 if values:
                     widget.set(values[0])
+
+            else:
+                widget.delete(0, "end")

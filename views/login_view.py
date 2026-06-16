@@ -13,6 +13,9 @@ from config.app_config import (
 )
 from controllers.auth_controller import AuthController
 from views.main_layout import MainLayout
+from PIL import Image
+import os
+from utils.resource_path import resource_path
 
 
 class LoginView(ctk.CTk):
@@ -38,17 +41,25 @@ class LoginView(ctk.CTk):
         )
         container.place(relx=0.5, rely=0.5, anchor="center")
 
-        title = ctk.CTkLabel(
-            container,
-            text="BUILDORA",
-            font=("Arial", 34, "bold"),
-            text_color=COLOR_PRIMARY
-        )
-        title.pack(pady=(45, 5))
+        logo_path = resource_path(os.path.join("assets", "logo", "buildora.ico"))
+        img = Image.open(logo_path)
 
+        logo_image = ctk.CTkImage(
+            light_image=img,
+            dark_image=img,
+            size=(50, 50)
+        )
+        logo_label = ctk.CTkLabel(
+            container,
+            image=logo_image,
+            text=""
+        )
+        logo_label.image = logo_image
+        logo_label.pack(pady=(35, 8))      
+ 
         subtitle = ctk.CTkLabel(
             container,
-            text="Gestión de presupuestos de obra",
+            text="¡Hola! ¿estas listo?",
             font=("Arial", 14),
             text_color=COLOR_MUTED_TEXT
         )
@@ -67,7 +78,7 @@ class LoginView(ctk.CTk):
             width=300,
             height=42,
             placeholder_text="Contraseña",
-            show="*"
+            show="●"
         )
         self.password_entry.pack(pady=10)
 
@@ -104,6 +115,7 @@ class LoginView(ctk.CTk):
         messagebox.showerror("Error de autenticación", message)
 
     def open_main_layout(self, user):
-        main_window = MainLayout(user)
-        main_window.grab_set()
         self.withdraw()
+
+        main_window = MainLayout(user)
+        main_window.focus_force()

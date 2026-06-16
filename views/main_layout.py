@@ -10,6 +10,18 @@ from config.app_config import (
 )
 from views.dashboard_view import DashboardView
 from views.clientes_view import ClientesView 
+from views.proyectos_view import ProyectosView
+from views.materiales_view import MaterialesView
+from views.mano_obra_view import ManoObraView    
+from views.herramientas_view import HerramientasView
+from views.apus_view import ApusView    
+from views.presupuestos_view import PresupuestosView        
+from views.aiu_view import AiuView
+from views.reportes_view import ReportesView
+import os
+from PIL import Image
+from utils.resource_path import resource_path
+
 
 class MainLayout(ctk.CTkToplevel):
     def __init__(self, user):
@@ -32,26 +44,37 @@ class MainLayout(ctk.CTkToplevel):
         self.show_dashboard()
 
     def create_sidebar(self):
+        logo_path = resource_path(
+            os.path.join("assets", "buildora_logo.jpg")
+        )
+
+        img = Image.open(logo_path)
+
+        logo_image = ctk.CTkImage(
+            light_image=img,
+            dark_image=img,
+            size=(165, 55)
+        )
+
         logo = ctk.CTkLabel(
             self.sidebar,
-            text="BUILDORA",
-            font=("Arial", 24, "bold"),
-            text_color=COLOR_PRIMARY
+            image=logo_image,
+            text=""
         )
+        logo.image = logo_image
         logo.pack(pady=(30, 20))
 
         buttons = [
             ("Dashboard", self.show_dashboard),
             ("Clientes", self.show_clients),
-            ("Proyectos", self.not_available),
-            ("Materiales", self.not_available),
-            ("Mano de obra", self.not_available),
-            ("Herramientas", self.not_available),
-            ("APUs", self.not_available),
-            ("Presupuestos", self.not_available),
-            ("AIU", self.not_available),
-            ("Reportes", self.not_available),
-            ("Parámetros", self.not_available),
+            ("Proyectos", self.show_projects),
+            ("Materiales", self.show_materials),
+            ("Mano de obra", self.show_mano_obra),
+            ("Herramientas", self.show_herramientas),
+            ("APUs", self.show_apus),
+            ("Presupuestos", self.show_presupuestos),
+            ("AIU", self.show_aiu),
+            ("Reportes", self.show_reportes),
             ("Salir", self.exit_app),
         ]
 
@@ -99,4 +122,59 @@ class MainLayout(ctk.CTkToplevel):
         frame.pack(
             expand=True,
             fill="both"
+        )    
+        
+    def show_projects(self):
+        self.clear_content()
+
+        frame = ProyectosView(self.content)
+        frame.pack(expand=True, fill="both")
+        
+    def show_materials(self):
+        self.clear_content()
+
+        frame = MaterialesView(self.content)
+        frame.pack(expand=True, fill="both")
+        
+    def show_mano_obra(self):
+        self.clear_content()
+
+        frame = ManoObraView(self.content)
+        frame.pack(expand=True, fill="both")
+
+    def show_herramientas(self):
+
+        self.clear_content()
+
+        frame = HerramientasView(
+            self.content
         )
+
+        frame.pack(
+            fill="both",
+            expand=True
+        )
+        
+    def show_apus(self):
+        self.clear_content()
+
+        frame = ApusView(self.content)
+        frame.pack(expand=True, fill="both")
+        
+    def show_presupuestos(self):
+        self.clear_content()
+
+        frame = PresupuestosView(self.content, self.user)
+        frame.pack(expand=True, fill="both")
+        
+    def show_aiu(self):
+        self.clear_content()
+
+        frame = AiuView(self.content)
+        frame.pack(expand=True, fill="both")
+        
+    def show_reportes(self):
+        self.clear_content()
+
+        frame = ReportesView(self.content)
+        frame.pack(expand=True, fill="both")
